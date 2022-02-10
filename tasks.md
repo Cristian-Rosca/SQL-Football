@@ -6,7 +6,7 @@ Each of the questions/tasks below can be answered using a `SELECT` query. When y
 
 ```sql
 <!-- Copy solution here -->
-
+SELECT * FROM matches WHERE season = 2017;
 
 ```
 
@@ -14,7 +14,7 @@ Each of the questions/tasks below can be answered using a `SELECT` query. When y
 
 ```sql
 <!-- Copy solution here -->
-
+SELECT * FROM matches WHERE hometeam = 'Barcelona' OR awayteam = 'Barcelona';
 
 ```
 
@@ -22,7 +22,7 @@ Each of the questions/tasks below can be answered using a `SELECT` query. When y
 
 ```sql
 <!-- Copy solution here -->
-
+SELECT name FROM divisions WHERE country = 'Scotland';
 
 ```
 
@@ -30,14 +30,24 @@ Each of the questions/tasks below can be answered using a `SELECT` query. When y
 
 ```sql
 <!-- Copy solution here -->
+SELECT code FROM divisions WHERE name = 'Bundesliga'
 
+(Show all matches from D1 where Freiburg played)
+SELECT * FROM matches WHERE matches.division_code = 'D1' AND (hometeam = 'Freiburg' OR awayteam = 'Freiburg');
 
+SELECT COUNT (*) FROM matches WHERE matches.division_code = 'D1' AND (hometeam = 'Freiburg' OR awayteam = 'Freiburg');
 ```
 
 5) Find the unique names of the teams which include the word "City" in their name (as entered in the database)
 
 ```sql
 <!-- Copy solution here -->
+(Only examining hometeam - struggling to combine search across both hometeam and awayteam)
+SELECT COUNT (DISTINCT hometeam) FROM matches WHERE LOWER(hometeam) LIKE LOWER ('%City%'); 
+
+(The ids of all matches where hometeam or awayteam has 'City')
+SELECT COUNT (DISTINCT id) FROM matches WHERE LOWER(hometeam) OR WHERE LOWER(awayteam) LIKE LOWER ('%City%');
+
 
 
 ```
@@ -46,7 +56,13 @@ Each of the questions/tasks below can be answered using a `SELECT` query. When y
 
 ```sql
 <!-- Copy solution here -->
+SELECT code FROM divisions WHERE country = 'France';
 
+(Gets the number of distinct hometeams in F1 from dataset)
+SELECT COUNT (DISTINCT hometeam) FROM matches WHERE matches.division_code = 'F1';
+
+(Gets the number of distinct hometeams in F1 and F2from dataset)
+SELECT COUNT (DISTINCT hometeam) FROM matches WHERE matches.division_code = 'F1' OR matches.division_code = 'F2';
 
 ```
 
@@ -54,7 +70,11 @@ Each of the questions/tasks below can be answered using a `SELECT` query. When y
 
 ```sql
 <!-- Copy solution here -->
+(Only examines one possibility)
+SELECT * FROM matches WHERE hometeam = 'Huddersfield' AND awayteam = 'Swansea';
 
+(Examines both possibilities)
+SELECT * FROM matches WHERE hometeam = 'Huddersfield' AND awayteam = 'Swansea' OR (hometeam = 'Swansea' AND awayteam = 'Huddersfield');
 
 ```
 
@@ -62,6 +82,17 @@ Each of the questions/tasks below can be answered using a `SELECT` query. When y
 
 ```sql
 <!-- Copy solution here -->
+(Getting matches.division_code = 'N1')
+SELECT code FROM divisions WHERE name = 'Eredivisie';
+
+(All data where division is N1 and result is draw)
+SELECT * FROM matches WHERE division_code = 'N1' AND ftr = 'D';
+
+(All data where division is N1 and result is draw between 2010 and 2015)
+SELECT * FROM matches WHERE division_code = 'N1' AND ftr = 'D' AND season BETWEEN 2010 AND 2015;
+
+(Count all data where division is N1 and result is draw between 2010 and 2015)
+SELECT COUNT (*) FROM matches WHERE division_code = 'N1' AND ftr = 'D' AND season BETWEEN 2010 AND 2015;
 
 
 ```
@@ -70,7 +101,16 @@ Each of the questions/tasks below can be answered using a `SELECT` query. When y
 
 ```sql
 <!-- Copy solution here -->
+(Getting code for Premier League = E0)
+SELECT code FROM divisions WHERE name = 'Premier League';
 
+(Select matches played in PL)
+SELECT * FROM matches WHERE division_code = 'E0';
+
+(Sum of all goals scored in the PL)
+SELECT SUM(fthg + ftag) FROM matches WHERE division_code = 'E0';
+
+SELECT * FROM matches WHERE SUM (fthg + ftag ) > 0;
 
 ```
 
