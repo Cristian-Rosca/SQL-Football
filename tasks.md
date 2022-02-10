@@ -16,6 +16,8 @@ SELECT * FROM matches WHERE season = 2017;
 <!-- Copy solution here -->
 SELECT * FROM matches WHERE hometeam = 'Barcelona' OR awayteam = 'Barcelona';
 
+SELECT * FROM matches WHERE 'Barcelona' IN (hometeam, awayteam);
+
 ```
 
 3) What are the names of the Scottish divisions included?
@@ -64,6 +66,9 @@ SELECT COUNT (DISTINCT hometeam) FROM matches WHERE matches.division_code = 'F1'
 (Gets the number of distinct hometeams in F1 and F2from dataset)
 SELECT COUNT (DISTINCT hometeam) FROM matches WHERE matches.division_code = 'F1' OR matches.division_code = 'F2';
 
+#Method Andrew came up with#
+SELECT COUNT(DISTINCT hometeam) FROM (SELECT hometeam FROM matches WHERE division_code LIKE 'F%' UNION SELECT awayteam FROM matches WHERE division_code LIKE 'F%') AS allteams;
+
 ```
 
 7) Have Huddersfield played Swansea in the period covered?
@@ -104,13 +109,8 @@ SELECT COUNT (*) FROM matches WHERE division_code = 'N1' AND ftr = 'D' AND seaso
 (Getting code for Premier League = E0)
 SELECT code FROM divisions WHERE name = 'Premier League';
 
-(Select matches played in PL)
-SELECT * FROM matches WHERE division_code = 'E0';
-
-(Sum of all goals scored in the PL)
-SELECT SUM(fthg + ftag) FROM matches WHERE division_code = 'E0';
-
-SELECT * FROM matches WHERE SUM (fthg + ftag ) > 0;
+(Select matches played in PL and ORDER them by sum of goals)
+SELECT * FROM matches WHERE division_code = 'E0' ORDER BY (fthg +ftag) DESC, fthg DESC;
 
 ```
 
